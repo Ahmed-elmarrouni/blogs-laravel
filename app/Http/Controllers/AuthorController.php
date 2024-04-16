@@ -89,21 +89,40 @@ class AuthorController extends Controller
     }
 
     // DELETE AN ARTICLE
-    public function deleteArticle($id)
+    // public function deleteArticle($id)
+    // {
+    //     $article = Article::find($id);
+
+    //     if (!$article) {
+    //         return response()->json(['error' => 'Article not found'], 404);
+    //     }
+
+    //     $article->delete();
+
+    //     return redirect()->route('mangeAryicles')->with('success', 'Article deleted successfully');
+    // }
+
+    // public function deleteArticle(article $article)
+    // {
+    //     $article->delete();
+    //     return redirect('author.managearticles')->with('message', "article deleted sucusfully");
+    // }
+
+
+
+
+    public function deleteArticle(Request $request)
     {
-        $article = Article::find($id);
-    
-        if (!$article) {
-            return response()->json(['error' => 'Article not found'], 404);
+        $articleId = $request->input('article_id');
+        $article = Article::find($articleId);
+
+        if ($article) {
+            $article->delete();
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Article not found'], 404);
         }
-    
-        $article->delete();
-    
-        return redirect()->route('mangeAryicles')->with('success', 'Article deleted successfully');
     }
-    
-
-
 
     public function indexB()
     {

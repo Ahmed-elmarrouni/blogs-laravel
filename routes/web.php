@@ -81,4 +81,6 @@ Route::post('author.addPost', [AuthorController::class, 'addNewArticle'])->name(
 Route::get('/search', [AuthorController::class, 'search'])->name('search');
 Route::get('/search', [AuthorController::class, 'searchMngarticle'])->name('search');
 // delete article
-Route::delete('/article/{id}', 'AuthorController@deleteArticle')->name('deleteArticle');
+// Route::delete('author.manageArticles', [AuthorController::class, 'deleteArticle']);
+
+Route::post('author/manageArticles', [AuthorController::class, 'manageArticles'])->name('author.managearticles');
