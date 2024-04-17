@@ -21,7 +21,7 @@
                 </div>
                 {{-- Manage my articls --}}
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('mangeAryicles')" :active="request()->routeIs('mangeAryicles')">
+                    <x-nav-link :href="route('mangeArticles')" :active="request()->routeIs('mangeArticles')">
                         {{ __('Manage my articls') }}
                     </x-nav-link>
                 </div>

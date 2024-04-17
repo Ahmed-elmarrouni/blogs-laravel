@@ -29,7 +29,14 @@ class geustpgController extends Controller
         $articles = Article::where('titre', 'like', '%' . $query . '%')
             ->orWhere('contenu', 'like', '%' . $query . '%')
             ->paginate(6);
-            
+
         return view('guestarticles', compact('articles'));
+    }
+
+    // Page details
+    public function autharticledetails($id)
+    {
+        $article = Article::find($id);
+        return view('articledetails', compact('article'));
     }
 }

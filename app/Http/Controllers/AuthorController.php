@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Like;
 use Illuminate\Http\Request;
 
 
@@ -10,7 +11,9 @@ class AuthorController extends Controller
 {
     public function posts()
     {
-        $articles = Article::paginate(6);
+        $articles = Article::with("Like")->paginate(6);
+
+
         return view('dashboard', ['articles' => $articles]);
     }
 
@@ -30,12 +33,6 @@ class AuthorController extends Controller
             'contenu' => 'required',
         ]);
 
-        // Check if image file  upload
-        //jareb daba
-        // f file storage kaytuploda b hashname kaytgenera mais f database katstocki original filename
-        // jareb zid chi article daba
-        // ah wa5a
-        // oui dir login ghir mn database attend nchof dek no image
 
         if ($request->hasFile('url_image')) {
             $imagePath = $request->file('url_image');
@@ -111,24 +108,63 @@ class AuthorController extends Controller
 
 
 
-    public function deleteArticle(Request $request)
+    public function deleteArticle(Request $request, Article $article)
     {
-        $articleId = $request->input('article_id');
-        $article = Article::find($articleId);
-
-        if ($article) {
-            $article->delete();
-            return response()->json(['success' => true]);
-        } else {
-            return response()->json(['success' => false, 'message' => 'Article not found'], 404);
-        }
+        // $articleId = $request->input('article_id');
+        // $article = Article::find($articleId);
+        $article->delete();
+        return to_route('mangeArticles');
+        // if ($article) {
+        //     $article->delete();
+        //     return response()->json(['success' => true]);
+        // } else {
+        //     return response()->json(['success' => false, 'message' => 'Article not found'], 404);
+        // }
     }
 
     public function indexB()
     {
         return view('dashboard');
     }
+
+
+    // Articles detailes
+    public function authorticledetails($id)
+    {
+        $article = Article::find($id);
+        $Isliked=Like::where("user_id",auth()->user()->id)->where("article_id", $id)->exists();
+
+        return view('author.detailspg', compact('article', 'Isliked'));
+    }
+
+    // Likes function
+    public function likes(Request $request)
+    {
+        $likearticle=   auth()->user()->id;
+        $postid=$request->input("post_id");
+
+        $like = new Like();
+        $like->article_id=$postid;
+        $like->user_id=$likearticle;
+        $like->save();
+        return redirect()->back();
+     
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ///
 

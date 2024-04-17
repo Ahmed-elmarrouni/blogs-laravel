@@ -57,6 +57,9 @@ Route::get('/guestarticles', [geustpgController::class, 'index'])->name('guestar
 Route::get('/', [geustpgController::class, 'home'])->name('home');
 // search in guest articles page
 Route::get('/search', [geustpgController::class, 'search'])->name('search');
+// Route to page details article
+Route::get('/articledetails/{id}', [geustpgController::class, 'articledetails'])->name('articledetails');
+
 
 // Fetch data from data base
 // Route::resource('articles', ArticleController::class);
@@ -69,7 +72,7 @@ Route::get('admin.admindashboard', [AdminController::class, 'index'])->name('adm
 
 // Author User page 
 Route::get('author.addPost', [AuthorController::class, 'index'])->name('addPost');
-Route::get('author.mangeAryicles', [AuthorController::class, 'manageposts'])->name('mangeAryicles');
+Route::get('author.mangeArticles', [AuthorController::class, 'manageposts'])->name('mangeArticles');
 Route::get('/dashboard', [AuthorController::class, 'indexB'])->name('dashboard');
 
 Route::get('dashboard', [AuthorController::class, 'posts'])->name('dashboard');
@@ -84,3 +87,9 @@ Route::get('/search', [AuthorController::class, 'searchMngarticle'])->name('sear
 // Route::delete('author.manageArticles', [AuthorController::class, 'deleteArticle']);
 
 Route::post('author/manageArticles', [AuthorController::class, 'manageArticles'])->name('author.managearticles');
+Route::delete('author/manageArticles/{article}', [AuthorController::class, 'deleteArticle'])->name('author.deleteArticle');
+// Details page for auth user 
+Route::get('author/detailspg/{id}', [AuthorController::class, 'authorticledetails'])->name('detailspg');
+
+// Route for likes
+Route::post('/like', [AuthorController::class, 'likes'])->name('likes');

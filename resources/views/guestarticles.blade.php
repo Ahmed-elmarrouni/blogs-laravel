@@ -98,10 +98,11 @@
                                     {{ $firstTwoLines }}
                                 </p>
                                 <div class="flex items-center flex-wrap ">
-                                    <button
-                                        class="bg-gradient-to-r from-orange-300 to-amber-400 hover:scale-105 drop-shadow-md shadow-cla-violate px-4 py-1 rounded-lg">Learn
+                                    <a href="{{ route('articledetails', ['id' => $item->id]) }}"
+                                        class="bg-gradient-to-r from-orange-300 to-amber-400 hover:scale-105 drop-shadow-md shadow-cla-violate px-4 py-1 rounded-lg">
+                                        Learn
                                         more
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>

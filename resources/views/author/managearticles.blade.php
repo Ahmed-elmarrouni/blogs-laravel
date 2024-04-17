@@ -40,7 +40,7 @@
     </x-slot>
 
     {{-- SCRIPT FOR MODALES --}}
-    {{-- <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             const modalToggleButtons = document.querySelectorAll('[data-modal-toggle]');
             const modalHideButtons = document.querySelectorAll('[data-modal-hide]');
@@ -62,51 +62,10 @@
                 });
             });
         });
-    </script> --}}
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const modalButton = document.querySelector('[data-modal-target="popup-modal"]');
-            const form = document.getElementById('delete-form');
-            const articleIdInput = document.getElementById('article_id');
-
-            // Add event listeners to all delete buttons
-            const deleteButtons = document.querySelectorAll('.delete-article-btn');
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const articleId = this.dataset.articleId;
-                    articleIdInput.value = articleId;
-                });
-            });
-
-            // Handle form submission
-            form.addEventListener('submit', function(e) {
-                e.preventDefault(); // Prevent default form submission
-
-                // Get form data
-                const formData = new FormData(form);
-
-                // Send AJAX request
-                fetch(form.action, {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            // Redirect or do something else if deletion is successful
-                            window.location.reload(); // For example, reload the page
-                        } 
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-            });
-        });
     </script>
 
     {{--  --}}
 
-    <h1>Manage articles</h1>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-16">
 
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -143,14 +102,14 @@
                         class="bg-white border-b dark:bg-white-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-100">
 
                         <td class="p-4">
-                            <img src="{{ $item->url_image ? asset('storage/url_images/' . $item->url_image) : asset('images/noImage.jpg') }}"
-                                alt="article_image" style="width: 15rem; margin-left: 8%;" alt="article image">
+                                <img src="{{ $item->url_image ? asset('storage/url_images/' . $item->url_image) : asset('images/noImage.jpg') }}"
+                                    alt="article_image" style="width: 15rem; margin-left: 8%;" alt="article image">
 
 
                         </td>
                         <th scope="row"
                             class="px-6 py-4 font-medium text-black-900 whitespace-nowrap dark:text-gray-900">
-                            Apple MacBook Pro 17"
+                            {{ $item->titre }}
                         </th>
 
                         <td class="px-6 py-4">
@@ -164,22 +123,11 @@
                         </td>
                         <td class="px-6 py-4">
 
-
-                            {{-- <button data-modal-target="popup-modal" data-modal-toggle="popup-modal"
-                                class="block text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
-                                type="button">
-                                Delete
-                            </button> --}}
-
-                            {{-- <button data-article-id="{{ $item->id }}"
-                                class="block text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center delete-article-btn">
-                                Delete
-                            </button> --}}
-
-                            <form id="delete-form" method="POST" action="{{ route('author.managearticles') }}">
+                            <form id="delete-form" method="POST"
+                                action="{{ route('author.deleteArticle', $item->id) }}">
                                 @csrf
                                 @method('DELETE')
-                                <input type="hidden" name="article_id" id="article_id">
+                                {{-- <input type="hidden" name="article_id" id="article_id"> --}}
                                 <button data-modal-target="popup-modal" data-modal-toggle="popup-modal"
                                     class="block text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
                                     type="button">
@@ -213,7 +161,7 @@
                                                 </svg>
                                                 <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
                                                     Are you sure you want to delete this article?</h3>
-                                                <button data-modal-hide="popup-modal" type="button"
+                                                <button data-modal-hide="popup-modal" type="submit"
                                                     class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
                                                     Yes, I'm sure
                                                 </button>
