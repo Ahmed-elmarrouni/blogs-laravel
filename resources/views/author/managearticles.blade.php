@@ -79,13 +79,10 @@
                         Article Title
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Category
+                        Author name
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Accessories
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Available
+                        Number of Likes
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Delete
@@ -102,8 +99,8 @@
                         class="bg-white border-b dark:bg-white-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-100">
 
                         <td class="p-4">
-                                <img src="{{ $item->url_image ? asset('storage/url_images/' . $item->url_image) : asset('images/noImage.jpg') }}"
-                                    alt="article_image" style="width: 15rem; margin-left: 8%;" alt="article image">
+                            <img src="{{ $item->url_image ? asset('storage/url_images/' . $item->url_image) : asset('images/noImage.jpg') }}"
+                                alt="article_image" style="width: 15rem; margin-left: 8%;" alt="article image">
 
 
                         </td>
@@ -113,13 +110,10 @@
                         </th>
 
                         <td class="px-6 py-4">
-                            Laptop
+                            {{ $item->user->name }}
                         </td>
-                        <td class="px-6 py-4">
-                            Yes
-                        </td>
-                        <td class="px-6 py-4">
-                            Yes
+                        <td class="px-6 py-4 text-gray-900">
+                            {{ count($item->Like) }}
                         </td>
                         <td class="px-6 py-4">
 

@@ -15,6 +15,8 @@ class geustpgController extends Controller
         $articles = Article::paginate(6);
         return view('guestarticles', ['articles' => $articles]);
     }
+
+    
     // Home button
     public function home()
     {
@@ -34,7 +36,7 @@ class geustpgController extends Controller
     }
 
     // Page details
-    public function autharticledetails($id)
+    public function articledetails($id)
     {
         $article = Article::find($id);
         return view('articledetails', compact('article'));

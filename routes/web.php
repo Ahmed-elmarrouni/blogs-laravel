@@ -7,7 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\welcomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthorController;
-
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +35,9 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-
+Route::get('/admin/admindashboard', function () {
+    return view('/admin/dashboard');
+})->middleware(['auth', 'verified', 'admin.credentials'])->name('admin.dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -61,13 +63,18 @@ Route::get('/search', [geustpgController::class, 'search'])->name('search');
 Route::get('/articledetails/{id}', [geustpgController::class, 'articledetails'])->name('articledetails');
 
 
-// Fetch data from data base
-// Route::resource('articles', ArticleController::class);
-
-
-
 // ADMIN PAGE 'DASHBOARD'
-Route::get('admin.admindashboard', [AdminController::class, 'index'])->name('admindashboard');
+Route::get('/admin/admindashboard', [AdminController::class, 'index'])->name('admindashboard');
+Route::get('/admin/newarticles', [AdminController::class, 'newarticles'])->name('newarticles');
+// /////////////////////
+// Route to show articles in admin dashboard
+Route::get('/admin/articlesadmin', [AdminController::class, 'articlesadmin'])->name('articlesadmin');
+// Route to delete articles in admin dashboard view
+Route::delete('/admin/articlesadmin/{article}', [AdminController::class, 'deleteArticle'])->name('admin.deleteArticle');
+
+// /////////////////////
+// Route to show Users in admin dashboard
+Route::get('/admin/usersadmin', [AdminController::class, 'usersadmin'])->name('usersadmin');
 
 
 // Author User page 
@@ -81,11 +88,13 @@ Route::get('dashboard', [AuthorController::class, 'posts'])->name('dashboard');
 
 // ADD NEW ARTICLES
 Route::post('author.addPost', [AuthorController::class, 'addNewArticle'])->name('addNewArticle');
-Route::get('/search', [AuthorController::class, 'search'])->name('search');
+Route::get('/search', [AuthorController::class, 'searchindashboard'])->name('searchindashboard');
 Route::get('/search', [AuthorController::class, 'searchMngarticle'])->name('search');
 // delete article
 // Route::delete('author.manageArticles', [AuthorController::class, 'deleteArticle']);
 
+
+// Route::get('author/manageArticles', [AuthorController::class, 'manageArticles'])->name('author.manageArticles');
 Route::post('author/manageArticles', [AuthorController::class, 'manageArticles'])->name('author.managearticles');
 Route::delete('author/manageArticles/{article}', [AuthorController::class, 'deleteArticle'])->name('author.deleteArticle');
 // Details page for auth user 
@@ -93,3 +102,11 @@ Route::get('author/detailspg/{id}', [AuthorController::class, 'authorticledetail
 
 // Route for likes
 Route::post('/like', [AuthorController::class, 'likes'])->name('likes');
+
+// COMMENTS 
+// post the comments
+Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+
+// Show all the comments in deatailspd
+Route::get('/comments', [CommentController::class, 'showComments'])->name('comments.index');
+

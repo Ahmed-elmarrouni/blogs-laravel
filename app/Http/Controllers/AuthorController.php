@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\Like;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 
 class AuthorController extends Controller
@@ -12,11 +14,8 @@ class AuthorController extends Controller
     public function posts()
     {
         $articles = Article::with("Like")->paginate(6);
-
-
         return view('dashboard', ['articles' => $articles]);
     }
-
 
     // Add new
     public function index()
@@ -50,7 +49,7 @@ class AuthorController extends Controller
     }
 
     // SEARCH 
-    public function search(Request $request)
+    public function searchindashboard(Request $request)
     {
         $query = $request->input('query');
 
@@ -58,20 +57,21 @@ class AuthorController extends Controller
             ->orWhere('contenu', 'like', '%' . $query . '%')
             ->paginate(6);
 
-        return view('dashboard', compact('articles'));
+        return view('/dashboard', compact('articles'));
     }
 
 
 
-    // manage articles
-
+    // Return to managearticles view just my articles
     public function manageposts()
     {
-        $articles = Article::paginate(6);
+        $user_id = auth()->id();
+        $articles = Article::where('user_id', $user_id)->paginate(6);
         return view('author.managearticles', ['articles' => $articles]);
-
-        // return view('author.managearticles');
     }
+
+
+
 
     // search in manage article page 
     public function searchMngarticle(Request $request)
@@ -85,41 +85,13 @@ class AuthorController extends Controller
         return view('author.managearticles', compact('articles'));
     }
 
-    // DELETE AN ARTICLE
-    // public function deleteArticle($id)
-    // {
-    //     $article = Article::find($id);
-
-    //     if (!$article) {
-    //         return response()->json(['error' => 'Article not found'], 404);
-    //     }
-
-    //     $article->delete();
-
-    //     return redirect()->route('mangeAryicles')->with('success', 'Article deleted successfully');
-    // }
-
-    // public function deleteArticle(article $article)
-    // {
-    //     $article->delete();
-    //     return redirect('author.managearticles')->with('message', "article deleted sucusfully");
-    // }
 
 
-
-
+    // DELETE AN ARICLE
     public function deleteArticle(Request $request, Article $article)
     {
-        // $articleId = $request->input('article_id');
-        // $article = Article::find($articleId);
         $article->delete();
         return to_route('mangeArticles');
-        // if ($article) {
-        //     $article->delete();
-        //     return response()->json(['success' => true]);
-        // } else {
-        //     return response()->json(['success' => false, 'message' => 'Article not found'], 404);
-        // }
     }
 
     public function indexB()
@@ -132,7 +104,7 @@ class AuthorController extends Controller
     public function authorticledetails($id)
     {
         $article = Article::find($id);
-        $Isliked=Like::where("user_id",auth()->user()->id)->where("article_id", $id)->exists();
+        $Isliked = Like::where("user_id", auth()->user()->id)->where("article_id", $id)->exists();
 
         return view('author.detailspg', compact('article', 'Isliked'));
     }
@@ -140,15 +112,14 @@ class AuthorController extends Controller
     // Likes function
     public function likes(Request $request)
     {
-        $likearticle=   auth()->user()->id;
-        $postid=$request->input("post_id");
+        $likearticle =   auth()->user()->id;
+        $postid = $request->input("post_id");
 
         $like = new Like();
-        $like->article_id=$postid;
-        $like->user_id=$likearticle;
+        $like->article_id = $postid;
+        $like->user_id = $likearticle;
         $like->save();
         return redirect()->back();
-     
     }
 }
 

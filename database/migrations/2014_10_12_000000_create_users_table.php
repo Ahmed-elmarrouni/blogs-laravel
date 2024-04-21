@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('type');
             $table->string('email')->unique();
+            $table->string('type')->default('normal')->after('username');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->string('provider')->nullable();
@@ -30,8 +31,16 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+
+    public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('type');
+        });
     }
+
+    // public function down(): void
+    // {
+    //     Schema::dropIfExists('users');
+    // }
 };

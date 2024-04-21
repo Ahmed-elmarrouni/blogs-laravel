@@ -31,7 +31,7 @@ class DeleteFakeData extends Command
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
 
         // Delete records
-        DB::table('articles')->delete();
+        DB::table('likes')->delete();
 
         // Enable foreign key checks
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
